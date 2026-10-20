@@ -192,3 +192,17 @@ Why: ESLint has the React Hooks rules and typescript-eslint strict rules; it's w
 Rejected: oxlint — much faster, but a younger rule set. Revisit if lint time ever matters.
 
 **D50. Dev server proxies `/api` and `/admin` to Django** so local dev is single-origin like production (needed for session auth + CSRF).
+
+## Tenancy implementation (2026-10-19)
+
+**D51. Custom user model (`accounts.User`, subclass of AbstractUser) from the first migration.**
+Why: Django can't cleanly swap the user model after migrations exist. Rejected: default `auth.User` — locks in fields forever.
+
+**D52. Tenancy enforced by code structure, not discipline.** `OrgOwnedModel` (abstract base with `organization` FK + `.for_org()`), `OrgScopedViewSet` (scopes reads, forces org on create), and architecture tests that fail if any API view over bakery data skips the base class or any model with an `organization` field skips `OrgOwnedModel`. Tests were mutation-checked: removing the filter, trusting the request body, or using a plain ModelViewSet each fails the suite.
+Rejected: filtering by org in each view — one forgotten filter leaks a bakery's data; Postgres row-level security — strong but adds DB-session plumbing too early (revisit if tenancy gets complex); separate schema per tenant (django-tenants) — heavy ops for small tenants.
+
+**D53. Active bakery = the user's only membership, else the `X-Organization` header.** Missing header with several memberships → 400 (never guess); non-member bakery → 403; another bakery's record → 404 (don't reveal it exists).
+Rejected: storing the active bakery in the session — invisible state that causes "wrong bakery" bugs in multi-tab use; subdomain per bakery — needs DNS/cert work for no v1 benefit.
+
+**D54. `Ingredient` is the first org-owned model, with only name, `density_g_per_ml`, `grams_per_each` (positive when set, enforced by DB check constraints) and a case-insensitive unique name per bakery.**
+Why: needed by the conversion engine next and survives any interview outcome. Allergens, supplier and kind (ingredient vs packaging) wait until their features are built.

@@ -7,6 +7,7 @@ dependencies = [
     "djangorestframework>=3.16",
     "dj-database-url>=2.3",
     "psycopg[binary]>=3.2",
+    "django-stubs-ext>=6.1.2",
 ]
 
 [dependency-groups]
@@ -30,6 +31,9 @@ target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "DJ"]
+
+[tool.ruff.lint.per-file-ignores]
+"*/migrations/*" = ["E501"]
 
 [tool.mypy]
 python_version = "3.13"

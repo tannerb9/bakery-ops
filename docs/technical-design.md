@@ -40,11 +40,12 @@ Sentry (errors, both tiers) · PostHog (product analytics) · uptime monitor
 | Quality | Playwright (few E2E flows) |
 
 ## 3. Data model (entities)
-All tenant-owned tables carry `organization_id` and are accessed via the org-scoped manager.
+All tenant-owned tables inherit `OrgOwnedModel` (`organization` FK + `.for_org()`); API views subclass `OrgScopedViewSet`. Active bakery comes from the user's only membership or the `X-Organization` header (D53).
 
 **Tenancy**
+- `accounts.User` (custom, AbstractUser)
 - `Organization`
-- `Membership` (user, organization, role: owner | member)
+- `Membership` (user, organization, role: owner | member; unique per user+organization)
 - `OrgSettings` (display_units: metric | imperial, labor_rate_per_hour, overhead_pct, currency — single)
 
 **Supply**
