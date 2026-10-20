@@ -4,6 +4,19 @@ import os
 from pathlib import Path
 
 import dj_database_url
+import django_stubs_ext
+from rest_framework import generics, serializers, viewsets
+
+# Lets classes be written as e.g. `admin.ModelAdmin[Ingredient]` for the type checker.
+django_stubs_ext.monkeypatch(
+    extra_classes=[
+        generics.GenericAPIView,
+        viewsets.GenericViewSet,
+        viewsets.ModelViewSet,
+        serializers.BaseSerializer,
+        serializers.ModelSerializer,
+    ]
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,7 +50,12 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "accounts",
+    "organizations",
+    "inventory",
 ]
+
+AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
