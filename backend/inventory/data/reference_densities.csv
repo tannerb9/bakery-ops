@@ -9,9 +9,9 @@ Granulated sugar,198,1,cup,,KA chart,
 "Brown sugar, packed",213,1,cup,,KA chart,Light or dark
 "Confectioners' sugar, unsifted",113,1,cup,,KA chart,
 Butter,113,8,tbsp,,KA chart,
-Milk,227,1,cup,,KA chart,Chart uses the 8 oz shortcut; real milk is ~1.03 g/ml (~243 g/cup)
-Heavy cream,227,1,cup,,KA chart,Chart uses the 8 oz shortcut; also light cream and half & half
-Yogurt,227,1,cup,,KA chart,Chart uses the 8 oz shortcut
+Milk,244,1,cup,,USDA,Whole milk. KA chart says 227 g (8 oz shortcut) (D60a)
+Heavy cream,238,1,cup,,USDA,Heavy whipping cream (liquid). KA chart says 227 g (8 oz shortcut) (D60a)
+Yogurt,245,1,cup,,USDA,Plain regular yogurt; Greek is a separate ingredient. KA chart says 227 g (8 oz shortcut) (D60a)
 Water,237,1,cup,1.000000,Physical constant,Chart says 227 g (8 oz shortcut); real density used (D60)
 Baking powder,4,1,tsp,,KA chart,
 Baking soda,3,1/2,tsp,,KA chart,
