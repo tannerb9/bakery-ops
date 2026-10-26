@@ -206,3 +206,50 @@ Rejected: storing the active bakery in the session — invisible state that caus
 
 **D54. `Ingredient` is the first org-owned model, with only name, `density_g_per_ml`, `grams_per_each` (positive when set, enforced by DB check constraints) and a case-insensitive unique name per bakery.**
 Why: needed by the conversion engine next and survives any interview outcome. Allergens, supplier and kind (ingredient vs packaging) wait until their features are built.
+
+## Ingredient variants (2026-10-21)
+
+**D55. Two-level ingredients: generic `Ingredient` (what a recipe calls for) + `IngredientVariant` (the specific branded product you buy).** (T raised the need: the same ingredient from different brands behaves differently.)
+- Variant: brand, product name, optional density / grams-per-each overrides, allergens + may-contain, certifications, supplier item code, notes, and `specs` (category-specific properties, validated against a registry of known keys with unit, type and allowed range).
+- Purchases are always of a variant, so FIFO lots record the exact brand used in every batch with no extra input.
+- Recipe lines reference the generic ingredient, optionally requiring a specific variant. Conversion and live costing use the required variant if set, else the generic default density / latest price across variants.
+- Built with the purchase-log PR; the current `Ingredient` model already serves as the generic level.
+Rejected: brand field on Ingredient (ties recipes to one brand; substitutions force recipe edits); free-text notes (can't cost or analyze by brand).
+Unlocks later: yield/waste comparison by brand.
+
+**D56. Allergens and may-contain live on the variant.** Recipe allergen rollup uses the required variant if set; otherwise the union across all variants the bakery stocks (safe default for labels). Supersedes the ingredient-level allergen part of D33. (T confirmed.)
+
+**D57. Variant vs separate ingredient rule.** (T confirmed.) If swapping changes amounts or method, they are separate ingredients (natural vs Dutch-process cocoa; instant vs active dry yeast). If they're interchangeable in the recipe, they are variants (bread flour brands; Diamond vs Morton kosher salt — same weight, different density).
+
+**D57a. Plain-language test for D57:** "Would you knowingly use one in place of the other when you run out?" Yes → variants. No → separate ingredients. Classified examples: separate — flavoring oils vs extracts, fine vs coarse cornmeal, Greek vs regular yogurt, yeast types, Dutch vs natural cocoa, real vs compound chocolate, GF blends with vs without gum, regular vs blackstrap molasses, Ceylon vs cassia cinnamon, block vs tub cream cheese, gel vs liquid coloring, cook-up vs instant starch. Variants — baking powder with/without aluminum, pure vs imitation vanilla, alcohol vs glycerin extracts, cream with/without stabilizers, flour brands (incl. bromated, enriched, ascorbic acid), butter brands, salt brands, dried fruit and nut treatments. (T confirmed.)
+
+**D58. Two kinds of roll-up attributes on variants.** (T confirmed.)
+- **"Contains" (union — any ingredient has it → recipe has it):** allergens, may-contain, and dietary flags (contains alcohol, gelatin, aluminum, animal-derived e.g. shellac).
+- **"Certified" (intersection — every ingredient must have it):** organic, certified gluten-free, kosher, halal.
+Same mechanism as D56: required variant if set, else across all stocked variants (union for "contains"; for "certified", every stocked variant must qualify).
+Rejected: allergens-only — misses vegan/halal/organic claims that cost almost nothing to add.
+
+**Parked:** recipe lines requiring a *property* instead of a brand (e.g. "any bread flour ≥ 12.5% protein", "any cream without stabilizers"). Pinning a variant covers v1; interviews show whether bakers think this way.
+
+## Imprecise measures (2026-10-26)
+
+**D59. "Rounded" measures (`rnd`, e.g. "1 rnd tbsp") get no conversion rule.** (T confirmed.) T no longer writes them; they only appear in old recipes.
+- The conversion engine handles exact units only and rejects imprecise ones.
+- The AI parser's review screen flags imprecise lines and asks for grams, showing a clearly labeled estimate (rounded ≈ 1.5× level) that the user must confirm or correct. Nothing is saved silently.
+- Old recipes become precise over time: weigh the rounded spoonful once, save a new recipe version in grams with a change note (e.g. "Replaced rnd tbsp bp with 9 g").
+Why: a fixed multiplier is a guess, which D19 forbids. Rejected: global multiplier (silent errors); per-bakery multiplier setting (adds a setting for a habit T has already dropped).
+Applies to other imprecise measures too (heaping, scant, pinch, dash) — same flag-and-confirm handling when the parser is built.
+
+## Unit conversion (2026-10-26)
+
+**D60. Conversion rules.** (T confirmed.) Test cases and seed densities come from King Arthur's ingredient weight chart (T's choice of source).
+- **US customary cup** = 236.5882365 ml; 16 tbsp per cup; 3 tsp per tbsp; fl oz = 1/8 cup. Metric cup (250 ml) can be added later.
+- **Exact math:** quantities are parsed to Fractions ("2 1/4", "1/3", "1.5") and unit factors are exact, so 1/3 cup × 3 = 1 cup with no drift. Rounding happens only for display.
+- **Display rounding:** under 10 g → 0.1 g (precision scale); 10 g and up → whole grams (kitchen scale). Half rounds up.
+- **Densities stored to 6 decimal places** (was 4): at 4 places some chart values drifted ~0.1 g after conversion.
+- **Water uses its real density (1.0 g/ml → 237 g/cup), not the chart's 227 g** (8 oz shortcut, ~4% off — matters for bread hydration). Milk, cream and yogurt keep the chart's 227 g, with a note.
+- Bakers enter density as a measure ("1 cup = 120 g"); the app derives g/ml (`density_from_measure`).
+- Supported units: g, kg, oz (weight), lb, ml, l, tsp, tbsp, cup/C, fl oz, each. "oz" always means weight. Imprecise measures raise (D59); unknown units raise; volume without density and count without grams-per-item raise (D19).
+- Seed data: `inventory/data/reference_densities.csv` (27 rows, source credited); every row is tested to convert back to the chart's grams.
+Rejected: metric cup (T bakes with US measures); 240 ml "nutrition label" cup (not what recipes use); floats (D16); one rounding rule for all sizes (0.1 g is noise for flour; whole grams too coarse for yeast and salt).
+Test-design note: chart cases that use the same unit as their source row only test fractions — the cup size cancels out. Cross-unit cases (tbsp from a cup row, tsp from a tbsp row) and exact-definition tests are what pin the unit sizes. Exact-halfway cases (e.g. 2¼ tsp yeast = 6.75 g) are excluded because the chart itself is rounded.
