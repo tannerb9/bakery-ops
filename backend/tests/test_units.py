@@ -97,6 +97,10 @@ def test_metric_volume_and_fluid_ounce() -> None:
     one = Decimal("1")
     assert to_grams("1", "l", density_g_per_ml=one) == Decimal("1000")
     assert to_grams("250", "ml", density_g_per_ml=one) == Decimal("250")
+    assert to_grams("1", "cl", density_g_per_ml=one) == Decimal("10")
+    assert to_grams("1", "dl", density_g_per_ml=one) == Decimal("100")
+    assert to_grams("2.5", "dl", density_g_per_ml=one) == to_grams("25", "cl", density_g_per_ml=one)
+    assert to_grams("25", "cl", density_g_per_ml=one) == to_grams("250", "ml", density_g_per_ml=one)
     assert to_grams("8", "fl oz", density_g_per_ml=one) == to_grams(
         "1", "cup", density_g_per_ml=one
     )
@@ -113,6 +117,16 @@ def test_metric_volume_and_fluid_ounce() -> None:
         ("teaspoon", "tsp"),
         ("grams", "g"),
         ("ML", "ml"),
+        ("cL", "cl"),
+        ("centiliter", "cl"),
+        ("centiliters", "cl"),
+        ("centilitre", "cl"),
+        ("centilitres", "cl"),
+        ("dL", "dl"),
+        ("deciliter", "dl"),
+        ("deciliters", "dl"),
+        ("decilitre", "dl"),
+        ("decilitres", "dl"),
         ("ea", "each"),
     ],
 )

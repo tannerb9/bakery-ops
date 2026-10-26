@@ -255,3 +255,7 @@ Rejected: metric cup (T bakes with US measures); 240 ml "nutrition label" cup (n
 Test-design note: chart cases that use the same unit as their source row only test fractions — the cup size cancels out. Cross-unit cases (tbsp from a cup row, tsp from a tbsp row) and exact-definition tests are what pin the unit sizes. Exact-halfway cases (e.g. 2¼ tsp yeast = 6.75 g) are excluded because the chart itself is rounded.
 
 **D60a. Milk, cream and yogurt also use real weights, not the chart's 227 g.** (T caught the inconsistency in D60: the chart's 227 g for these is the same "1 cup = 8 oz" shortcut as water.) Per cup, from USDA FoodData Central: whole milk 244 g, heavy whipping cream (liquid) 238 g, plain regular yogurt 245 g. Greek yogurt is a separate ingredient (D57a). Rule going forward: **for liquids, never use a "1 cup = 8 oz" shortcut value; use measured weights.** Supersedes the milk/cream/yogurt part of D60.
+
+**D60b. Centiliters (cl) added** (T spotted the gap): 1 cl = 10 ml; aliases centiliter(s), centilitre(s), any capitalization. Common on European bottles and recipes.
+
+**D60c. Deciliters (dl) added** (T approved): 1 dl = 100 ml; aliases deciliter(s), decilitre(s), any capitalization. Common in Scandinavian and German recipes.
