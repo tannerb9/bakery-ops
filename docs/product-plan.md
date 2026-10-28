@@ -32,6 +32,9 @@ Last updated: 2026-10-14 · Owner: T (Tanner Brainard)
 - How do you currently know which products make you money?
 - What's the Wi-Fi / phone situation in your kitchen? (offline need)
 - Would you record the price on every sale? (friction check)
+- What have you tried for costing or inventory? Why did you stop using it?
+- Do you switch brands? Has a brand change ever affected how something turned out?
+- Do you use recipes from other countries? Which ones? (decides whether metric cups and spoons are needed — D60d)
 
 ## 3. Metrics (placeholders — finalize after interviews)
 - **North star:** recipes costed per active user per week.
@@ -43,7 +46,7 @@ Recipes with version history · ingredient costing · time calculation · purcha
 
 **Likely survivor regardless of interviews:** recipe + ingredient + unit conversion + costing core.
 
-**Later:** order management, waste/yield analytics, lot traceability, food safety logs, AI ingredient substitution, natural-language queries, demand forecasting (needs real sales data), voice input in kitchen mode.
+**Later:** order management, waste/yield analytics, lot traceability, food safety logs, AI ingredient substitution, natural-language queries, demand forecasting (needs real sales data), voice input in kitchen mode, yield/waste comparison by ingredient brand, recipe lines that require a property instead of a brand (e.g. protein ≥ 12.5%).
 **Out of scope:** labor scheduling, POS/accounting integrations, native mobile apps.
 
 ## 5. Feature specs (current recommendations)
