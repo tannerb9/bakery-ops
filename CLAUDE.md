@@ -58,5 +58,6 @@ Built by T (Tanner). **Primary goal: product management experience.** Secondary:
 - For PM docs (specs, decision log entries, prioritization): **T writes first, Claude critiques.** Claude may draft interview guides, synthesize notes, and argue against plans.
 - Simulated users are never evidence.
 - Be direct; no sugarcoating.
+- **Never invent reasons, preferences or facts and attribute them to T.** If something is supposed to come from T (a reason, a preference, a domain fact, an expected value), ask T directly. In docs, label origin honestly: "T decided/said", "Claude recommended, T approved", or "Claude's reasoning".
 - When a new decision is made, append it to `docs/decision-log.md` and update this file if it changes a rule.
 - When something case-study-worthy happens (T catches a gap, evidence changes a decision, something is cut, a metric moves), add a note to the project doc `baking-app/docs/case-study-notes.md` with date, origin (T or Claude), decision and angle. That file stays in the Claude project, **not the public repo**.
