@@ -66,11 +66,11 @@ def test_new_ingredients_go_to_my_bakery_even_if_the_request_names_another(
 
 @pytest.mark.django_db
 def test_decimals_are_returned_as_exact_strings_not_floats(client_a: APIClient) -> None:
-    client_a.post(URL, {"name": "Flour", "density_g_per_ml": "0.5300"}, format="json")
+    client_a.post(URL, {"name": "Flour", "density_g_per_ml": "0.507210"}, format="json")
 
     row = client_a.get(URL).json()[0]
 
-    assert row["density_g_per_ml"] == "0.5300"
+    assert row["density_g_per_ml"] == "0.507210"
 
 
 @pytest.mark.django_db

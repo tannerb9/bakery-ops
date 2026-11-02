@@ -1,0 +1,28 @@
+ingredient,grams,quantity,unit,density_g_per_ml,source,note
+All-purpose flour,120,1,cup,,KA chart,
+Bread flour,120,1,cup,,KA chart,
+Unbleached cake flour,120,1,cup,,KA chart,
+Whole wheat flour,113,1,cup,,KA chart,KA Premium 100% whole wheat
+Whole wheat pastry flour,96,1,cup,,KA chart,
+White rye flour,106,1,cup,,KA chart,
+Granulated sugar,198,1,cup,,KA chart,
+"Brown sugar, packed",213,1,cup,,KA chart,Light or dark
+"Confectioners' sugar, unsifted",113,1,cup,,KA chart,
+Butter,113,8,tbsp,,KA chart,
+Milk,244,1,cup,,USDA,Whole milk. KA chart says 227 g (8 oz shortcut) (D60a)
+Heavy cream,238,1,cup,,USDA,Heavy whipping cream (liquid). KA chart says 227 g (8 oz shortcut) (D60a)
+Yogurt,245,1,cup,,USDA,Plain regular yogurt; Greek is a separate ingredient. KA chart says 227 g (8 oz shortcut) (D60a)
+Water,237,1,cup,1.000000,Physical constant,Chart says 227 g (8 oz shortcut); real density used (D60)
+Baking powder,4,1,tsp,,KA chart,
+Baking soda,3,1/2,tsp,,KA chart,
+"Salt, Diamond Crystal kosher",8,1,tbsp,,KA chart,Brand-specific: becomes a variant
+"Salt, Morton kosher",16,1,tbsp,,KA chart,Brand-specific: becomes a variant
+"Salt, table",18,1,tbsp,,KA chart,
+"Cocoa powder, unsweetened",42,1/2,cup,,KA chart,Measured with KA Triple Cocoa Blend; brand-specific
+Honey,21,1,tbsp,,KA chart,
+Vanilla extract,14,1,tbsp,,KA chart,
+Vegetable oil,198,1,cup,,KA chart,
+"Cornmeal, whole",138,1,cup,,KA chart,
+Rolled oats,89,1,cup,,KA chart,Old-fashioned or quick-cooking (KA's own rolled oats: 113 g)
+Chocolate chips,170,1,cup,,KA chart,Measured with Guittard bittersweet; brand-specific
+Instant yeast,9,1,tbsp,,KA chart,

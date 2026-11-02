@@ -50,13 +50,14 @@ All tenant-owned tables inherit `OrgOwnedModel` (`organization` FK + `.for_org()
 
 **Supply**
 - `Supplier`
-- `Ingredient` (name, kind: ingredient | packaging, density_g_per_ml nullable, grams_per_each nullable, allergens, may_contain)
-- `Purchase` — **append-only; each purchase is a lot.** supplier, ingredient, quantity_entered, purchase_unit, quantity_base, total_price, unit_cost_base (derived), purchased_at, expires_at (optional). Creates a `purchased` ledger entry. **Purchases are the price history** — no separate price table.
+- `Ingredient` — generic, what recipes call for (name, kind: ingredient | packaging, default density_g_per_ml, default grams_per_each)
+- `IngredientVariant` — the branded product bought (ingredient, brand, product_name, density/grams_per_each overrides, allergens, may_contain, dietary flags, certifications, supplier_item_code, notes, `specs` JSON validated against a property registry: e.g. protein_pct, ash_type, bleached, bromated, butterfat_pct, cultured, salted, cocoa_pct, fat_pct, contains_aluminum, vanilla_type, extract_base, stabilizers, gum_starch_ratio, size_grade, bloom_strength). Purchases reference a variant (D55–D58).
+- `Purchase` — **append-only; each purchase is a lot.** supplier, ingredient_variant, quantity_entered, purchase_unit, quantity_base, total_price, unit_cost_base (derived), purchased_at, expires_at (optional). Creates a `purchased` ledger entry. **Purchases are the price history** — no separate price table.
 
 **Recipes**
 - `Recipe` (name, tags, current_version, draft)
 - `RecipeVersion` — **immutable.** version_number, change_note (required), yield_quantity_base, product link, shelf_life, notes, hero_photo, created_by, created_at
-- `RecipeLine` (version, ingredient XOR sub_recipe, quantity_entered, unit_entered, quantity_base) — DB check constraint for XOR
+- `RecipeLine` (version, ingredient XOR sub_recipe, optional required_variant, quantity_entered, unit_entered, quantity_base) — DB check constraint for XOR
 - `RecipeStep` (version, order, description, duration_minutes, mode: active | passive, scaling: fixed | linear, temperature optional)
 
 **Products**
@@ -77,7 +78,9 @@ All tenant-owned tables inherit `OrgOwnedModel` (`organization` FK + `.for_org()
 - `RecipeParse` (input_type: text | image, input_ref, model, prompt_version, raw_output, validated_output, status, input_tokens, output_tokens, cost, created_by, resulting_recipe)
 
 ## 4. Business rules
-**Units**
+**Units (D60)**
+- All conversion lives in `inventory/units.py` (pure functions): `parse_quantity`, `to_grams`, `density_from_measure`, `display_grams`. Exact Fraction math; US cup 236.5882365 ml; display 0.1 g under 10 g, else whole grams.
+- Seed densities: `inventory/data/reference_densities.csv` (King Arthur chart; water = 1.0 g/ml).
 - Store g, ml, each. Display per `OrgSettings.display_units`.
 - Volume → weight: `density_g_per_ml`. Each → weight: `grams_per_each`. Missing → raise `MissingConversionError`; UI prompts the user. Never guess.
 - Preload densities for common ingredients.
@@ -100,8 +103,9 @@ All tenant-owned tables inherit `OrgOwnedModel` (`organization` FK + `.for_org()
 **Versioning**
 - Draft autosaves; "save as new version" requires a change note and freezes it.
 
-**Allergens**
-- Union through all lines, recursively through sub-recipes; "may contain" propagates the same way.
+**Roll-up attributes (D56, D58)**
+- "Contains" (allergens, may-contain, dietary flags): union through all lines and sub-recipes, using the required variant if set, else all stocked variants.
+- "Certified" (organic, GF, kosher, halal): intersection — every line must qualify.
 
 **Production planning**
 - needed_base = Σ(plan qty × sell multiple) − on-hand finished stock; batches = ceil(needed_base ÷ yield_base) → scale factor; recurse into sub-recipes; aggregate ingredient needs; compare with stock → shortfall list; backward schedule from due_at using step durations.
