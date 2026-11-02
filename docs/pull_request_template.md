@@ -19,14 +19,19 @@
 **Matches the request?** yes / no —
 **Tests reviewed:** what I checked, what's missing —
 
-**Risks checked**
+**Project rules** (check only if the PR touches backend data; otherwise write N/A)
 - [ ] Money and quantities use `Decimal`/`Fraction`, never `float`
 - [ ] New bakery data uses `OrgOwnedModel` + `OrgScopedViewSet`
 - [ ] Append-only tables are never updated or deleted
 - [ ] Missing data raises instead of guessing
 - [ ] Migration included if a model changed; no data loss
+
+**Always**
 - [ ] Docs updated if a rule changed; every "T decided" is really mine
 - [ ] CI green
+
+**Risks specific to this PR** (what could this change break? how did I check?)
+-
 
 **Blocking:**
 -
