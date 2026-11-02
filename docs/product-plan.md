@@ -34,6 +34,7 @@ Last updated: 2026-10-14 · Owner: T (Tanner Brainard)
 - Would you record the price on every sale? (friction check)
 - What have you tried for costing or inventory? Why did you stop using it?
 - Do you switch brands? Has a brand change ever affected how something turned out?
+- Do you use recipes from other countries? Which ones? (decides whether metric cups and spoons are needed — D60d)
 
 ## 3. Metrics (placeholders — finalize after interviews)
 - **North star:** recipes costed per active user per week.

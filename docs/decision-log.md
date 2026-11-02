@@ -260,3 +260,5 @@ Test-design note: chart cases that use the same unit as their source row only te
 **D60b. Centiliters (cl) added** (T spotted the gap): 1 cl = 10 ml; aliases centiliter(s), centilitre(s), any capitalization. Common on European bottles and recipes.
 
 **D60c. Deciliters (dl) added** (T approved): 1 dl = 100 ml; aliases deciliter(s), decilitre(s), any capitalization. Common in Scandinavian and German recipes.
+
+**D60d. Metric cup and spoons deferred until interviews.** (2026-10-28, T decided.) Claude laid out two options: an explicit "metric cup" unit only (cheap, doesn't fix ambiguity of a bare "cup") or full measuring systems per recipe (metric 15 ml tbsp, Australian 20 ml tbsp; needs the recipe model). T chose to wait for interview evidence. Interview question added: "Do you use recipes from other countries? Which ones?"
